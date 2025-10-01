@@ -5,11 +5,6 @@ import { userCols } from '@/modules/user/user.utils';
 import type { TQueries } from '@/types';
 import { eq, ilike, or, type SQL } from 'drizzle-orm';
 import { convertObjectValues, isValidObject, pickFields, sanitizeData } from 'nhb-toolbox';
-import type { GenericObject } from 'nhb-toolbox/object/types';
-
-export function extractKeys<T extends GenericObject>(obj: T): Array<keyof T> {
-	return Object.keys(obj);
-}
 
 class UserServices {
 	async getAllUsersFromDB(query?: TQueries<TPlainUser>) {
