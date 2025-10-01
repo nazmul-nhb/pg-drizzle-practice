@@ -1,28 +1,35 @@
 import { db } from '#/drizzle';
 import { users } from '#/drizzle/schema/users';
-import type { InsertUser } from '@/modules/user/user.types';
-import { omitFields } from 'nhb-toolbox';
+import { processLogin } from '@/modules/auth/auth.utils';
+import type { InsertUser, TLoginCredentials } from '@/modules/user/user.types';
+import { findUserByEmail, userCols } from '@/modules/user/user.utils';
+import { hashPassword } from '@/utilities/authUtilities';
 
 class AuthServices {
 	async registerUserInDB(payload: InsertUser) {
-		const user = await db.insert(users).values(payload).returning();
+		const hashedPass = await hashPassword(payload.password);
 
-		return omitFields(user[0], ['password']);
+		const user = await db
+			.insert(users)
+			.values({ ...payload, password: hashedPass })
+			.returning(userCols);
+
+		return user[0];
 	}
 
-	// /**
-	//  * * Login user.
-	//  * @param payload Login credentials (`email` and `password`).
-	//  * @returns Token as object.
-	//  */
-	// async loginUser(payload: ILoginCredentials): Promise<ITokens> {
-	// 	// * Validate and extract user from DB.
-	// 	const user = await User.validateUser(payload.email);
+	/**
+	 * * Login user.
+	 * @param payload Login credentials (`email` and `password`).
+	 * @returns Token as object.
+	 */
+	async loginUser(payload: TLoginCredentials) {
+		// * Validate and extract user from DB.
+		const user = await findUserByEmail(payload.email, true);
 
-	// 	const result = await processLogin(payload?.password, user);
+		const result = await processLogin(payload?.password, user);
 
-	// 	return result;
-	// }
+		return result;
+	}
 
 	// /**
 	//  * Refresh token.

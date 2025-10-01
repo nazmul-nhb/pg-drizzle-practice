@@ -1,7 +1,8 @@
 import configs from '@/configs';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
-import type { IPlainUser, IUserDoc } from '@/modules/user/user.types';
+import type { ITokens, TUser } from '@/modules/user/user.types';
 import { comparePassword, generateToken } from '@/utilities/authUtilities';
+import { omitFields } from 'nhb-toolbox';
 import { STATUS_CODES } from 'nhb-toolbox/constants';
 
 /**
@@ -10,7 +11,7 @@ import { STATUS_CODES } from 'nhb-toolbox/constants';
  * @param user User document from the database.
  * @returns Access and refresh tokens along with user information.
  */
-export const processLogin = async <T extends IUserDoc>(password: string, user: T) => {
+export const processLogin = async (password: string, user: TUser) => {
 	// * Check if password matches with the saved password in DB.
 	const passwordMatched = await comparePassword(password, user?.password);
 
@@ -41,11 +42,9 @@ export const processLogin = async <T extends IUserDoc>(password: string, user: T
 		configs.refreshExpireTime
 	);
 
-	const { password: _, ...userInfo } = user as IPlainUser;
-
 	return {
 		access_token: accessToken,
 		refresh_token: refreshToken,
-		user: userInfo,
-	};
+		user: omitFields(user, ['password']),
+	} as ITokens;
 };

@@ -1,9 +1,10 @@
 import { db } from '#/drizzle';
 import { users } from '#/drizzle/schema/users';
-import type { TUser } from '@/modules/user/user.types';
+import type { TPlainUser } from '@/modules/user/user.types';
+import { userCols } from '@/modules/user/user.utils';
 import type { TQueries } from '@/types';
 import { eq, ilike, or, type SQL } from 'drizzle-orm';
-import { convertObjectValues, isValidObject, pickFields } from 'nhb-toolbox';
+import { convertObjectValues, isValidObject, pickFields, sanitizeData } from 'nhb-toolbox';
 import type { GenericObject } from 'nhb-toolbox/object/types';
 
 export function extractKeys<T extends GenericObject>(obj: T): Array<keyof T> {
@@ -11,7 +12,7 @@ export function extractKeys<T extends GenericObject>(obj: T): Array<keyof T> {
 }
 
 class UserServices {
-	async getAllUsersFromDB(query?: TQueries<TUser>) {
+	async getAllUsersFromDB(query?: TQueries<TPlainUser>) {
 		const queries = pickFields(
 			convertObjectValues(query!, { keys: ['id'], convertTo: 'number' }),
 			['id', 'first_name', 'last_name', 'email', 'role', 'user_name']
@@ -19,16 +20,18 @@ class UserServices {
 
 		const filters: SQL[] =
 			isValidObject(query) ?
-				Object.entries(queries).map(([key, value]) => {
-					if (typeof value === 'string') {
-						return ilike(users[key as keyof TUser], value);
+				Object.entries(sanitizeData(queries, { ignoreNullish: true })).map(
+					([key, value]) => {
+						if (typeof value === 'string') {
+							return ilike(users[key as keyof TPlainUser], `%${value}%`);
+						}
+						return eq(users[key as 'id'], value!);
 					}
-					return eq(users[key as 'id'], value!);
-				})
+				)
 			:	[];
 
 		const result = await db
-			.select()
+			.select(userCols)
 			.from(users)
 			.orderBy(users.id)
 			.where(or(...filters));

@@ -1,9 +1,6 @@
 import type { users } from '#/drizzle/schema/users';
 
-export type InsertUser = Omit<
-	typeof users.$inferInsert,
-	'id' | 'is_active' | 'created_at' | 'updated_at'
->;
+export type InsertUser = Omit<typeof users.$inferInsert, 'id' | 'created_at' | 'updated_at'>;
 
 export type TUser = typeof users.$inferSelect;
 

@@ -1,6 +1,6 @@
 import configs from '@/configs';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
-import type { IUser } from '@/modules/user/user.types';
+import type { TUser } from '@/modules/user/user.types';
 import type { DecodedUser } from '@/types/interfaces';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -56,7 +56,7 @@ export const comparePassword = async (
  * @returns
  */
 export const generateToken = (
-	payload: Pick<IUser, 'email' | 'role'>,
+	payload: Pick<TUser, 'email' | 'role'>,
 	secret: string,
 	expiresIn: StringValue
 ): string => {

@@ -1,5 +1,5 @@
 import type { TEmail, TUserRole } from '@/types';
-import { boolean, uniqueIndex, pgTable, serial, timestamp, varchar } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { generateRandomID } from 'nhb-toolbox';
 
 export const users = pgTable(

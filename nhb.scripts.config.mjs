@@ -7,7 +7,7 @@ import { Stylog } from 'nhb-toolbox/stylog';
 export default defineScriptConfig({
 	format: {
 		args: ['--write'],
-		files: ['src', 'nhb.scripts.config.mjs'],
+		files: ['src', 'nhb.scripts.config.mjs', 'eslint.config.mjs', 'drizzle.config.ts'],
 		ignorePath: '.prettierignore',
 	},
 	lint: { folders: ['src'], patterns: ['**/*.ts'] },
