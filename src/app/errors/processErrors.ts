@@ -1,8 +1,10 @@
+import { handleDrizzleQueryError } from '@/errors/drizzleErrors';
 import { errorGuard } from '@/errors/ErrorGuard';
 import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import { genericErrors } from '@/errors/genericErrors';
 import { handleZodErrors } from '@/errors/zodErrors';
 import type { IErrorResponse } from '@/types/interfaces';
+import { DrizzleQueryError } from 'drizzle-orm';
 import { HTTP_STATUS } from 'nhb-toolbox/constants';
 import { ZodError } from 'zod';
 
@@ -17,6 +19,10 @@ const processErrors = (error: unknown): IErrorResponse => {
 	// Zod Validation Error
 	if (error instanceof ZodError) {
 		return handleZodErrors(error, stack);
+	}
+	// Handle Drizzle Error
+	else if (error instanceof DrizzleQueryError) {
+		return handleDrizzleQueryError(error, stack);
 	}
 	// Express Body Parser Error
 	else if (errorGuard.isParserError(error)) {

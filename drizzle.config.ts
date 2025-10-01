@@ -4,7 +4,7 @@ import configs from './src/app/configs';
 export default defineConfig({
 	dialect: 'postgresql',
 	schema: './src/drizzle/schema/*',
-	out: './src/drizzle/migrations',
+	out: './migrations',
 	dbCredentials: {
 		url: configs.databaseUrl,
 	},

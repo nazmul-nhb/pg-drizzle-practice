@@ -5,9 +5,17 @@ import type { StrictObject } from 'nhb-toolbox/object/types';
 import type { LooseLiteral } from 'nhb-toolbox/utils/types';
 import type Mail from 'nodemailer/lib/mailer';
 
-export interface PrismaErrorMeta extends StrictObject {
-	modelName: string;
-	target: string[];
+export interface DrizzleErrorCause extends StrictObject, Error {
+	severity_local: LooseLiteral<'ERROR'>;
+	severity: LooseLiteral<'ERROR'>;
+	code: `${number}`;
+	detail: string;
+	schema_name: LooseLiteral<'public'>;
+	table_name: string;
+	constraint_name: string;
+	file: string;
+	line: `${number}`;
+	routine: string;
 }
 
 export interface IParserError {
