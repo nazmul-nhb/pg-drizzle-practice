@@ -1,9 +1,13 @@
 import { db } from '#/drizzle';
-import { users, type InsertUser } from '#/drizzle/schema/UserTable';
+import { users } from '#/drizzle/schema/users';
+import type { InsertUser } from '@/modules/user/user.types';
+import { omitFields } from 'nhb-toolbox';
 
 class AuthServices {
 	async registerUserInDB(payload: InsertUser) {
-		return await db.insert(users).values(payload).returning();
+		const user = await db.insert(users).values(payload).returning();
+
+		return omitFields(user[0], ['password']);
 	}
 
 	// /**

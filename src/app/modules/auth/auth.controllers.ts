@@ -7,8 +7,6 @@ class AuthControllers {
 	registerUser = catchAsync(async (req, res) => {
 		const user = await authServices.registerUserInDB(req.body);
 
-		console.log(user);
-
 		sendResponse(res, 'User', 'POST', user, 'User registered successfully!');
 	});
 

@@ -1,5 +1,6 @@
 import { db } from '#/drizzle';
-import { users, type User } from '#/drizzle/schema/UserTable';
+import { users } from '#/drizzle/schema/users';
+import type { TUser } from '@/modules/user/user.types';
 import type { TQueries } from '@/types';
 import { eq, ilike, or, type SQL } from 'drizzle-orm';
 import { convertObjectValues, isValidObject, pickFields } from 'nhb-toolbox';
@@ -10,17 +11,17 @@ export function extractKeys<T extends GenericObject>(obj: T): Array<keyof T> {
 }
 
 class UserServices {
-	async getAllUsersFromDB(query?: TQueries<User>) {
+	async getAllUsersFromDB(query?: TQueries<TUser>) {
 		const queries = pickFields(
 			convertObjectValues(query!, { keys: ['id'], convertTo: 'number' }),
-			['id', 'name']
+			['id', 'first_name', 'last_name', 'email', 'role', 'user_name']
 		);
 
 		const filters: SQL[] =
 			isValidObject(query) ?
 				Object.entries(queries).map(([key, value]) => {
 					if (typeof value === 'string') {
-						return ilike(users[key as keyof User], value);
+						return ilike(users[key as keyof TUser], value);
 					}
 					return eq(users[key as 'id'], value!);
 				})
@@ -31,16 +32,6 @@ class UserServices {
 			.from(users)
 			.orderBy(users.id)
 			.where(or(...filters));
-
-		// const p = await prisma.user.findMany({
-		// 	where: {
-		// 		email: {
-		// 			contains: 'hello',
-		// 		},
-		// 	},
-		// });
-
-		// console.log(p);
 
 		// const {
 		// 	_sum: { id: sum },
