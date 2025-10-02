@@ -84,13 +84,13 @@ class UserServices {
 	/**
 	 * * Delete a user from DB.
 	 * @param id ID of the user to delete.
-	 * @returns Deleted user's id as `{ deletedId: number }`
+	 * @returns Deleted user's id as `{ deleted_id: number }`
 	 */
 	async deleteUserByIdFromDB(id: number) {
 		const [res] = await db
 			.delete(users)
 			.where(eq(users.id, id))
-			.returning({ deletedId: users.id });
+			.returning({ deleted_id: users.id });
 
 		if (!res) {
 			throw new ErrorWithStatus(

@@ -1,8 +1,11 @@
 // @ts-check
 
 import { cpSync } from 'fs';
-import { defineScriptConfig } from 'nhb-scripts';
+import { defineScriptConfig, updateCollection, updateRoutes } from 'nhb-scripts';
 import { Stylog } from 'nhb-toolbox/stylog';
+import { createDrizzlePostgresSchema } from './scripts/createSchema.mjs';
+import { expressDrizzlePostgresTemplate } from './scripts/moduleTemplate.mjs';
+import { updateDrizzleInstance } from './scripts/updateDrizzle.mjs';
 
 export default defineScriptConfig({
 	format: {
@@ -30,7 +33,25 @@ export default defineScriptConfig({
 		force: false,
 		destination: 'src/app/modules',
 		defaultTemplate: 'express-drizzle-postgres',
-		templates: {},
+		templates: {
+			'express-drizzle-postgres': {
+				createFolder: true,
+				destination: 'src/app/modules',
+				files: expressDrizzlePostgresTemplate,
+				onComplete: (moduleName) => {
+					updateCollection(moduleName);
+					updateRoutes(moduleName, true);
+				},
+			},
+			'drizzle-postgres-schema': {
+				createFolder: false,
+				destination: 'src/drizzle/schema',
+				files: createDrizzlePostgresSchema,
+				onComplete: (schemaName) => {
+					updateDrizzleInstance(schemaName);
+				},
+			},
+		},
 	},
 });
 

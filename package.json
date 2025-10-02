@@ -1,6 +1,6 @@
 {
   "name": "pg-drizzle-practice",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Express TypeScript Drizzle (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
@@ -16,6 +16,7 @@
     "check": "drizzle-kit check --config=drizzle.config.ts",
     "drizzle:up": "drizzle-kit up --config=drizzle.config.ts",
     "studio": "drizzle-kit studio --config=drizzle.config.ts",
+    "schema": "nhb-module -t drizzle-postgres-schema",
     "format": "nhb-format",
     "lint": "nhb-lint",
     "fix": "nhb-fix",
@@ -23,7 +24,7 @@
     "count": "nhb-count",
     "module": "nhb-module",
     "delete": "nhb-delete",
-    "secret": "node secret.mjs"
+    "secret": "node scripts/generateSecret.mjs"
   },
   "author": {
     "name": "Nazmul Hassan",

@@ -1,23 +1,34 @@
 import { db } from '#/drizzle';
 import { users } from '#/drizzle/schema/users';
 import configs from '@/configs';
+import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import { processLogin } from '@/modules/auth/auth.utils';
 import type { InsertUser, TLoginCredentials } from '@/modules/user/user.types';
 import { findUserByEmail, userCols } from '@/modules/user/user.utils';
 import type { DecodedUser } from '@/types/interfaces';
 import { generateToken, hashPassword, verifyToken } from '@/utilities/authUtilities';
 import { pickFields } from 'nhb-toolbox';
+import { STATUS_CODES } from 'nhb-toolbox/constants';
 
 class AuthServices {
 	async registerUserInDB(payload: InsertUser) {
 		const hashedPass = await hashPassword(payload.password);
 
-		const user = await db
+		const [user] = await db
 			.insert(users)
 			.values({ ...payload, password: hashedPass })
 			.returning(userCols);
 
-		return user[0];
+		if (!user) {
+			throw new ErrorWithStatus(
+				'Creation Error',
+				'Cannot create user right now! Please try again later!',
+				STATUS_CODES.INTERNAL_SERVER_ERROR,
+				'CREATE /auth/register'
+			);
+		}
+
+		return user;
 	}
 
 	/**
