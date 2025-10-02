@@ -16,7 +16,10 @@ export const users = pgTable(
 			.notNull()
 			.$default(() => `guest_${generateRandomID({ length: 6 })}`),
 		created_at: timestamp().defaultNow().notNull(),
-		updated_at: timestamp().defaultNow().notNull(),
+		updated_at: timestamp()
+			.defaultNow()
+			.notNull()
+			.$onUpdate(() => new Date()),
 	},
 	(table) => {
 		return [

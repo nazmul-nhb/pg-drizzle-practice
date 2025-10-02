@@ -15,6 +15,27 @@ class UserControllers {
 
 		sendResponse(res, 'User', 'GET', user);
 	});
+
+	/** * Get a user by user id. */
+	getUserById = catchAsync(async (req, res) => {
+		const user = await userServices.getUserByIdFromDB(Number(req.params.id));
+
+		sendResponse(res, 'User', 'GET', user);
+	});
+
+	/** * Delete a user by id. */
+	deleteUserById = catchAsync(async (req, res) => {
+		const result = await userServices.deleteUserByIdFromDB(Number(req.params.id));
+
+		sendResponse(res, 'User', 'DELETE', result);
+	});
+
+	/** * Update a user by id. */
+	updateUserById = catchAsync(async (req, res) => {
+		const result = await userServices.updateUserInDB(Number(req.params.id), req.body);
+
+		sendResponse(res, 'User', 'PATCH', result);
+	});
 }
 
 export const userControllers = new UserControllers();

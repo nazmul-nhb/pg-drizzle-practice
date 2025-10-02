@@ -8,6 +8,7 @@ const creationSchema = authValidations.loginSchema
 	.extend({
 		first_name: z.string({ error: 'First name is required!' }).trim(),
 		last_name: z.string({ error: 'Last name is required!' }).trim(),
+		user_name: z.string().optional(),
 		confirm_password: z
 			.string({ error: 'Password confirmation is required!' })
 			.trim()
@@ -28,5 +29,15 @@ const creationSchema = authValidations.loginSchema
 /** Convert drizzle table schema to Zod schema */
 const drizzleSchema = createInsertSchema(users);
 
+/** User update Schema */
+const updateSchema = z
+	.object({
+		first_name: z.string().trim(),
+		last_name: z.string().trim(),
+		user_name: z.string().trim(),
+	})
+	.partial()
+	.strict();
+
 /** User Validation Schema */
-export const userValidations = { creationSchema, drizzleSchema };
+export const userValidations = { creationSchema, drizzleSchema, updateSchema };
