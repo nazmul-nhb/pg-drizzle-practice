@@ -1,3 +1,5 @@
+import { USER_ROLES } from '@/constants';
+import authorizeUser from '@/middlewares/authorizeUser';
 import validateRequest from '@/middlewares/validateRequest';
 import { authControllers } from '@/modules/auth/auth.controllers';
 import { authValidations } from '@/modules/auth/auth.validation';
@@ -16,6 +18,6 @@ router.post('/login', validateRequest(authValidations.loginSchema), authControll
 
 // router.post('/refresh-token', authControllers.refreshToken);
 
-// router.get('/profile', authorizeUser(...USER_ROLES), authControllers.getCurrentUser);
+router.get('/profile', authorizeUser(...USER_ROLES), authControllers.getCurrentUser);
 
 export const authRoutes = router;

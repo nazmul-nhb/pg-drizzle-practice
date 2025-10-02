@@ -9,6 +9,12 @@ import { STATUS_CODES } from 'nhb-toolbox/constants';
 
 export const { password, ...userCols } = getTableColumns(users);
 
+/**
+ * * Find a specific user using user email.
+ * @param email User email
+ * @param withPassword Whether to retrieve user with or without password.Defaults to `false`.
+ * @returns USer object from database.
+ */
 export async function findUserByEmail<Pass extends boolean = false>(
 	email: TEmail | undefined,
 	withPassword?: Pass

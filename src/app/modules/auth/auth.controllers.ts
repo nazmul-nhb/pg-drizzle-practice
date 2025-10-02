@@ -34,12 +34,12 @@ class AuthControllers {
 	// 	sendResponse(res, 'N/A', 'OK', token, 'Successfully retrieved new access token!');
 	// });
 
-	// /** * Get current logged in user. */
-	// getCurrentUser = catchAsync(async (req, res) => {
-	// 	const user = await authServices.getCurrentUserFromDB(req.user);
+	/** * Get current logged in user. */
+	getCurrentUser = catchAsync(async (req, res) => {
+		const user = await authServices.getCurrentUserFromDB(req.user);
 
-	// 	sendResponse(res, 'User', 'GET', user);
-	// });
+		sendResponse(res, 'User', 'GET', user);
+	});
 }
 
 export const authControllers = new AuthControllers();

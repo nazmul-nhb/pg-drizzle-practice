@@ -3,6 +3,7 @@ import { users } from '#/drizzle/schema/users';
 import { processLogin } from '@/modules/auth/auth.utils';
 import type { InsertUser, TLoginCredentials } from '@/modules/user/user.types';
 import { findUserByEmail, userCols } from '@/modules/user/user.utils';
+import type { DecodedUser } from '@/types/interfaces';
 import { hashPassword } from '@/utilities/authUtilities';
 
 class AuthServices {
@@ -53,14 +54,16 @@ class AuthServices {
 	// 	return { token: accessToken };
 	// }
 
-	// /** * Get current user from DB. */
-	// async getCurrentUserFromDB(client?: DecodedUser) {
-	// 	const user = await User.validateUser(client?.email);
+	/**
+	 * * Get the current logged-in user's info from DB.
+	 * @param email User details from decoded JWT token.
+	 * @returns The user details without the password field.
+	 */
+	async getCurrentUserFromDB(client: DecodedUser | undefined) {
+		const user = await findUserByEmail(client?.email);
 
-	// 	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
-
-	// 	return userInfo;
-	// }
+		return user;
+	}
 }
 
 export const authServices = new AuthServices();

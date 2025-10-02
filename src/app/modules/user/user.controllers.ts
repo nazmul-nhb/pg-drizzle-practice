@@ -9,12 +9,12 @@ class UserControllers {
 		sendResponse(res, 'User', 'GET', users);
 	});
 
-	// /** * Get current logged in user. */
-	// getCurrentUser = catchAsync(async (req, res) => {
-	// 	const user = await userServices.getCurrentUserFromDB(req?.user?.email);
+	/** * Get current logged in user. */
+	getCurrentUser = catchAsync(async (req, res) => {
+		const user = await userServices.getCurrentUserFromDB(req?.user?.email);
 
-	// 	sendResponse(res, 'User', 'GET', user);
-	// });
+		sendResponse(res, 'User', 'GET', user);
+	});
 }
 
 export const userControllers = new UserControllers();

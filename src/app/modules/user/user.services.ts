@@ -7,6 +7,11 @@ import { eq, ilike, or, type SQL } from 'drizzle-orm';
 import { convertObjectValues, isValidObject, pickFields, sanitizeData } from 'nhb-toolbox';
 
 class UserServices {
+	/**
+	 * * Get all users from database.
+	 * @param query Optional query parameters to pass.
+	 * @returns All users that matched the query as an array.
+	 */
 	async getAllUsersFromDB(query?: TQueries<TPlainUser>) {
 		const queries = pickFields(
 			convertObjectValues(query!, { keys: ['id'], convertTo: 'number' }),
@@ -44,6 +49,11 @@ class UserServices {
 		return result;
 	}
 
+	/**
+	 * * Get the current logged-in user's info from DB.
+	 * @param email User email
+	 * @returns The user details without the password field.
+	 */
 	async getCurrentUserFromDB(email: TEmail | undefined) {
 		const user = await findUserByEmail(email);
 

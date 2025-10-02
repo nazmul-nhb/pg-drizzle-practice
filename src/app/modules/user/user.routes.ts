@@ -1,3 +1,5 @@
+import { USER_ROLES } from '@/constants';
+import authorizeUser from '@/middlewares/authorizeUser';
 import { userControllers } from '@/modules/user/user.controllers';
 import { Router } from 'express';
 
@@ -9,6 +11,6 @@ router.get(
 	userControllers.getAllUsers
 );
 
-// router.get('/profile', authorizeUser(...USER_ROLES), userControllers.getCurrentUser);
+router.get('/profile', authorizeUser(...USER_ROLES), userControllers.getCurrentUser);
 
 export const userRoutes = router;
