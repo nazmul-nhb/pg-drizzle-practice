@@ -1,8 +1,8 @@
 import { db } from '#/drizzle';
 import { users } from '#/drizzle/schema/users';
 import type { TPlainUser } from '@/modules/user/user.types';
-import { userCols } from '@/modules/user/user.utils';
-import type { TQueries } from '@/types';
+import { findUserByEmail, userCols } from '@/modules/user/user.utils';
+import type { TEmail, TQueries } from '@/types';
 import { eq, ilike, or, type SQL } from 'drizzle-orm';
 import { convertObjectValues, isValidObject, pickFields, sanitizeData } from 'nhb-toolbox';
 
@@ -44,13 +44,11 @@ class UserServices {
 		return result;
 	}
 
-	// async getCurrentUserFromDB(email: TEmail | undefined) {
-	// 	const user = await User.validateUser(email);
+	async getCurrentUserFromDB(email: TEmail | undefined) {
+		const user = await findUserByEmail(email);
 
-	// 	const { password: _, __v, ...userInfo } = user.toObject<IPlainUser>();
-
-	// 	return userInfo;
-	// }
+		return user;
+	}
 }
 
 export const userServices = new UserServices();

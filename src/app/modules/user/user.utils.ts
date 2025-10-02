@@ -4,27 +4,37 @@ import { ErrorWithStatus } from '@/errors/ErrorWithStatus';
 import type { TPlainUser, TUser } from '@/modules/user/user.types';
 import type { TEmail } from '@/types';
 import { eq, getTableColumns } from 'drizzle-orm';
+import { isEmail } from 'nhb-toolbox';
 import { STATUS_CODES } from 'nhb-toolbox/constants';
 
 export const { password, ...userCols } = getTableColumns(users);
 
 export async function findUserByEmail<Pass extends boolean = false>(
-	email: TEmail,
+	email: TEmail | undefined,
 	withPassword?: Pass
 ): Promise<Pass extends true ? TUser : TPlainUser> {
-	const user = await db
-		.select({ ...userCols, ...(withPassword && { password }) })
-		.from(users)
-		.where(eq(users.email, email));
-
-	if (!user[0]) {
+	if (!isEmail(email)) {
 		throw new ErrorWithStatus(
-			'Not Found Error',
-			`User with email ${email} not found!`,
-			STATUS_CODES.NOT_FOUND,
+			'Bad Request',
+			`${email} is not a valid email`,
+			STATUS_CODES.BAD_REQUEST,
 			'email'
 		);
 	}
 
-	return user[0] as Pass extends true ? TUser : TPlainUser;
+	const [user] = await db
+		.select({ ...userCols, ...(withPassword && { password }) })
+		.from(users)
+		.where(eq(users.email, email));
+
+	if (!user) {
+		throw new ErrorWithStatus(
+			'Not Found Error',
+			`User with email ${email} not found!`,
+			STATUS_CODES.NOT_FOUND,
+			'user'
+		);
+	}
+
+	return user as Pass extends true ? TUser : TPlainUser;
 }
