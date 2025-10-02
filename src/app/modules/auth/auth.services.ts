@@ -1,10 +1,12 @@
 import { db } from '#/drizzle';
 import { users } from '#/drizzle/schema/users';
+import configs from '@/configs';
 import { processLogin } from '@/modules/auth/auth.utils';
 import type { InsertUser, TLoginCredentials } from '@/modules/user/user.types';
 import { findUserByEmail, userCols } from '@/modules/user/user.utils';
 import type { DecodedUser } from '@/types/interfaces';
-import { hashPassword } from '@/utilities/authUtilities';
+import { generateToken, hashPassword, verifyToken } from '@/utilities/authUtilities';
+import { pickFields } from 'nhb-toolbox';
 
 class AuthServices {
 	async registerUserInDB(payload: InsertUser) {
@@ -32,27 +34,28 @@ class AuthServices {
 		return result;
 	}
 
-	// /**
-	//  * Refresh token.
-	//  * @param token Refresh token from client.
-	//  * @returns New access token.
-	//  */
-	// async refreshToken(token: string): Promise<{ token: string }> {
-	// 	// * Verify and decode token
-	// 	const decodedToken = verifyToken(configs.refreshSecret, token);
+	/**
+	 * * Refresh access token (Get new one).
+	 * @param token Refresh token from client.
+	 * @returns New access token.
+	 */
+	async refreshToken(token: string): Promise<{ token: string }> {
+		// * Verify and decode token
+		const { email } = verifyToken(configs.refreshSecret, token);
 
-	// 	// * Validate and extract user from DB.
-	// 	const user = await User.validateUser(decodedToken.email);
+		// * Validate and extract user from DB.
+		const user = await findUserByEmail(email);
+		// const [user] = await db.select({email: users.email, role: users.role }).from(users).where(eq(users.email, email));
 
-	// 	// * Create token and send to the client.
-	// 	const accessToken = generateToken(
-	// 		pickFields(user, ['email', 'role']),
-	// 		configs.accessSecret,
-	// 		configs.accessExpireTime
-	// 	);
+		// * Create token and send to the client.
+		const accessToken = generateToken(
+			pickFields(user, ['email', 'role']),
+			configs.accessSecret,
+			configs.accessExpireTime
+		);
 
-	// 	return { token: accessToken };
-	// }
+		return { token: accessToken };
+	}
 
 	/**
 	 * * Get the current logged-in user's info from DB.

@@ -16,7 +16,7 @@ router.post(
 
 router.post('/login', validateRequest(authValidations.loginSchema), authControllers.loginUser);
 
-// router.post('/refresh-token', authControllers.refreshToken);
+router.post('/refresh-token', authControllers.refreshToken);
 
 router.get('/profile', authorizeUser(...USER_ROLES), authControllers.getCurrentUser);
 

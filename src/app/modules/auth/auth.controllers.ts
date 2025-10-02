@@ -25,14 +25,14 @@ class AuthControllers {
 		sendResponse(res, 'User', 'OK', { user, token: access_token }, 'Login successful!');
 	});
 
-	// /** * Generate new access token. */
-	// refreshToken = catchAsync(async (req, res) => {
-	// 	const { refresh_token } = req.cookies;
+	/** * Generate new access token. */
+	refreshToken = catchAsync(async (req, res) => {
+		const { refresh_token } = req.cookies;
 
-	// 	const token = await authServices.refreshToken(refresh_token);
+		const token = await authServices.refreshToken(refresh_token);
 
-	// 	sendResponse(res, 'N/A', 'OK', token, 'Successfully retrieved new access token!');
-	// });
+		sendResponse(res, 'N/A', 'OK', token, 'Successfully retrieved new access token!');
+	});
 
 	/** * Get current logged in user. */
 	getCurrentUser = catchAsync(async (req, res) => {
