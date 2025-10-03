@@ -8,6 +8,8 @@ CREATE TABLE "users" (
 	"is_active" boolean DEFAULT true NOT NULL,
 	"user_name" varchar(32) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "users_user_name_unique" UNIQUE("user_name")
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
+--> statement-breakpoint
+CREATE UNIQUE INDEX "email_idx" ON "users" USING btree ("email");--> statement-breakpoint
+CREATE UNIQUE INDEX "user_name_idx" ON "users" USING btree ("user_name");

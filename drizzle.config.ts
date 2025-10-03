@@ -10,6 +10,7 @@ export default defineConfig({
 	},
 	migrations: {
 		schema: 'public',
+		prefix: 'timestamp',
 	},
 	introspect: {
 		casing: 'preserve',

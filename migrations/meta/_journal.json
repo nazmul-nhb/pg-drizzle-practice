@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1759336383515,
-      "tag": "0000_empty_rumiko_fujikawa",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1759336734771,
-      "tag": "0001_gray_ghost_rider",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1759336925107,
-      "tag": "0002_bent_mandroid",
+      "when": 1759470098256,
+      "tag": "20251003054137_drizzle",
       "breakpoints": true
     }
   ]
