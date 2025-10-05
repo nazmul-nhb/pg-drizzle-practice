@@ -18,7 +18,7 @@ class ErrorGuard {
 	}
 
 	isDrizzleErrorCause(error: unknown): error is DrizzleErrorCause {
-		return isObject(error) && isObjectWithKeys(error, ['code', 'detail', 'table_name']);
+		return isObjectWithKeys(error, ['code', 'detail', 'table_name']) && !!error;
 	}
 }
 
