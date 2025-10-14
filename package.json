@@ -1,6 +1,6 @@
 {
   "name": "pg-drizzle-practice",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Express TypeScript Drizzle (PostgreSQL) Server",
   "scripts": {
     "dev": "nodemon",
