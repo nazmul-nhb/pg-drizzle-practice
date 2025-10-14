@@ -7,7 +7,7 @@ import { capitalizeString, pluralizer } from 'nhb-toolbox';
  * @param {string} moduleName Name of the module.
  * @returns Array of objects (file names and contents).
  */
-export function expressDrizzlePostgresTemplate(moduleName,) {
+export function expressDrizzlePostgresTemplate(moduleName) {
     const capModule = capitalizeString(moduleName);
     const pluralModule = pluralizer.toPlural(moduleName);
     const pluralCapModule = pluralizer.toPlural(capModule);

@@ -7,7 +7,7 @@ import { pluralizer } from 'nhb-toolbox';
  * @param {string} schemaName Name of the schema in singular form (exactly as module name).
  * @returns Array of objects (file names and contents).
  */
-export function createDrizzlePostgresSchema(schemaName,) {
+export function createDrizzlePostgresSchema(schemaName) {
     const pluralSchema = pluralizer.toPlural(schemaName);
 
     return [
